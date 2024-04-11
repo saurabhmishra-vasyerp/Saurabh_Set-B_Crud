@@ -1,0 +1,45 @@
+package com.example.test.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.test.model.Employee;
+import com.example.test.repo.EmployeeRepository;
+
+public class EmployeeServiceImpl implements EmployeeService{
+	@Autowired
+	private EmployeeRepository employeeRepository;
+
+	@Override
+	public List<Employee> getAllEmployee() {
+		
+		return employeeRepository.findAll();
+	}
+
+	@Override
+	public Optional<Employee> findById(Long id) {
+		
+		return employeeRepository.findById(id);
+	}
+
+	@Override
+	public Employee saveEmployee(Employee employee) {
+		
+		return ;
+	}
+
+	@Override
+	public Employee updateEmployee(Long id, Employee employee) {
+		
+		return null;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		
+		
+	}
+
+}

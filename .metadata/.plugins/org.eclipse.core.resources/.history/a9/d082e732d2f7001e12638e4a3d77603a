@@ -1,0 +1,58 @@
+package com.example.test.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+
+import com.example.test.model.Employee;
+import com.example.test.service.EmployeeService;
+
+@Controller
+public class EmployeeController {
+	@Autowired
+	private EmployeeService employeeService;
+
+	@RequestMapping("/read-employee")
+	public String showEmployeePage(Model model) {
+		model.addAttribute("employees", employeeService.getAllEmployee());
+		return "reademployee";
+	}
+
+	@RequestMapping("/create-employee")
+	public String showCreateEmployeePage(Model model) {
+		model.addAttribute("command", new Employee());
+		return "createemployee";
+	}
+
+	@RequestMapping(value = "/create-employee", method = RequestMethod.POST)
+	public String createContact(@ModelAttribute("employee") Employee employee) {
+		employeeService.saveEmployee(employee);
+		return "redirect:/reademployee";
+	}
+
+	
+	@GetMapping("/update-employee/{id}")
+	public String showUpdateEmployeePage(@PathVariable Long id, Model model) {
+		model.addAttribute("id", id);
+		model.addAttribute("command", employeeService.findById(id).orElse(null));
+		return "updateemployee";
+	}
+
+	@RequestMapping(value = "/update-employee/{id}", method = RequestMethod.POST)
+	public String updateEmployee(@PathVariable Long id, @ModelAttribute("employee") Employee employee) {
+		employeeService.addOrUpdateEmployee(id, employee);
+		return "redirect:/reademployee";
+	}
+
+	@RequestMapping(value = "/delete-contact/{id}")
+	public String deleteContact(@PathVariable Long id) {
+		employeeService.deleteById(id);
+		return "redirect:/read-employee";
+	}
+}
